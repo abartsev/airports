@@ -1,0 +1,4 @@
+.form__cities { display: none;}
+.form__airports {display: none;}
+.form__cities.active { display: block;}
+.form__airports.active {display: block;}
