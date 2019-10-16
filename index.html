@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,37 +8,36 @@
     <title>Информация об аэропортах</title>
     <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
-<section class="section__form">
-    <h1 class="section__title" >Информация об аэропортах</h1>
-    <form class="form">
-        <div class="form__countries">
-            <label>
-                Страна
-                <select name="select__countries" class="select__countries">
-                </select>
-            </label>
+    <section class="section__form">
+        <h1 class="section__title">Информация об аэропортах</h1>
+        <form class="form">
+            <div class="form__countries">
+                <div class="form__input">
+                    <label>Страна</label>
+                    <select name="select__countries" class="select__countries"></select>
+                </div>
+            </div>
+            <div class="form__cities">
+                <div class="form__input">
+                    <label>Город</label>
+                    <select name="select__cities" class="select__cities"></select>
+                </div>
+            </div>
+            <div class="form__airports">
+                <div class="form__input">
+                    <label>Аэропорт</label>
+                    <select name="select__airports" class="select__airports"></select>
+                </div>
+            </div>
+            <div class="error"></div>
+        </form>
+        <div class="result">
+
         </div>
-        <div class="form__cities">
-            <label>
-                Город
-                <select name="select__cities" class="select__cities">
-                </select>
-            </label>
-        </div>
-        <div class="form__airports">
-            <label>
-                Аэропорт
-                <select name="select__airports" class="select__airports">
-                </select>
-            </label>
-        </div>
-        <div class="error"></div>
-    </form>
-    <div class="result">
-        
-    </div>
-</section>
+    </section>
 </body>
 <script src="./index.js"></script>
+
 </html>

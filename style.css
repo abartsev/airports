@@ -2,3 +2,37 @@
 .form__airports {display: none;}
 .form__cities.active { display: block;}
 .form__airports.active {display: block;}
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+.section__form {
+    text-align: center;
+}
+.form__input {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: .5rem 0;
+}
+.form__input label{
+    font-size: 16px;
+    color: #454545;
+    padding-bottom: .3rem;
+}
+.form__input select{
+    width: 400px;
+    height: 45px;
+    font-size: 16px;
+}
+.result {
+    margin-top: .5rem;
+    background-color: #dcdcdccc;
+    padding: .5rem;
+}
+.result__list {
+    list-style-type: none;
+    text-align: left;
+}

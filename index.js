@@ -23,103 +23,105 @@ return fetch(`https://raw.githubusercontent.com/vovkabelov/data/master/json/${na
 }
 
 function resultBlock (air) {
-result.innerHTML = '';
+    result.innerHTML = '';
 
-const optionsTime = {
-    timeZone: air.time_zone,
-    hour: 'numeric', minute: 'numeric', second: 'numeric',
-}, 
-optionsDate = {
-    day: '2-digit', month: '2-digit', year: '2-digit'
-},
-formatTime = new Intl.DateTimeFormat([], optionsTime),
-formatDate = new Intl.DateTimeFormat([], optionsDate),
-div = document.createElement('div');
-div.innerHTML = `<h2>Аэропорт ${air.name}</h2>
-    <ul>
-        <li>Действующий: ${(air.flightable) ? 'Да':'Нет'}</li>
-        <li>Код ИАТА: ${air.code}</li>
-        <li>Местное время: ${formatTime.format(new Date())} (${formatDate.format(new Date())})</li>
-    </ul>`;
-result.appendChild(div)
+    const optionsTime = {
+        timeZone: air.time_zone,
+        hour: 'numeric', minute: 'numeric', second: 'numeric',
+    }, 
+    optionsDate = {
+        day: '2-digit', month: '2-digit', year: '2-digit'
+    },
+    formatTime = new Intl.DateTimeFormat([], optionsTime),
+    formatDate = new Intl.DateTimeFormat([], optionsDate),
+    div = document.createElement('div');
+    div.innerHTML = `<h2 class="result__title">Аэропорт ${air.name || air.name_translations.en}</h2>
+        <ul class="result__list">
+            <li>Действующий: ${(air.flightable) ? 'Да':'Нет'}</li>
+            <li>Код ИАТА: ${air.code}</li>
+            <li>Местное время: ${formatTime.format(new Date())} (${formatDate.format(new Date())})</li>
+        </ul>`;
+    result.appendChild(div);
 }
 
-countries.addEventListener('click', function () {
+countries.addEventListener('change', function () {
 
-if(this.value != 0){
-    queryParam('cities')
-        .then(json => {
-            
-            json
-                .filter(cont => { return cont.country_code === this.value})
-                .sort((a, b) => (a.name > b.name) ? 1 : -1 )
-                .map(elem => {
-                const option = document.createElement('option');
-                if (flag) {
-                        option.innerText = 'Не выбрано';
-                        option.setAttribute('value', 0)
-                        cities.appendChild(option);
-                } else {
-                    if (elem.name) {
-                        option.innerText = elem.name;
-                        option.setAttribute('value', elem.code)
-                        cities.appendChild(option);
-                    }
-                }
-                flag = false;
-                
-            })
-            flag = true;
-            cities.closest('.form__cities').classList.add('active')
-        })
-}
-})
+    cities.closest('.form__cities').classList.remove('active');
+    cities.innerHTML = '';
+    airports.closest('.form__airports').classList.remove('active');
+    airports.innerHTML = '';
+    result.innerHTML = '';
 
-cities.addEventListener('click', function () {
+    if(this.value != 0 && obj_prevData.countries !== this.value){
+        obj_prevData.countries = this.value;
 
-airports.closest('.form__airports').classList.remove('active')
-if(this.value != 0){
-    queryParam('airports')
-        .then(json => {
-            
-console.log(json);
-
-            if (!json.length) {
-                error.innerHTML = "В данном городе нет Аэропортов"
-                return
-            } else {
-                error.innerHTML = '';
+        queryParam('cities')
+            .then(json => {   
+                 
                 json
-                    .filter(cont => { return cont.city_code === this.value})
+                    .filter(cont => { return cont.country_code === this.value})
                     .sort((a, b) => (a.name > b.name) ? 1 : -1 )
                     .map(elem => {
-                        arr_airports.set(elem.name, elem)
-                        const option = document.createElement('option');
-                        if (flag) {
-                            option.innerText = 'Не выбрано';
-                            option.setAttribute('value', 0)
-                            airports.appendChild(option);
-                        } else {
-                            if (elem.name) {
-                                option.innerText = elem.name;
-                                option.setAttribute('value', elem.name)
-                                airports.appendChild(option);
-                            }
-                        }
-                        flag = false;
-                    })
-            flag = true;
-            airports.closest('.form__airports').classList.add('active')
-            }
-        })
-}
+                    if (flag) {
+                        let option = new Option('Не выбрано', 0);
+                        cities.appendChild(option);
+                    }
+
+                    if (elem.name) {
+                        let option = new Option(elem.name, elem.code);
+                        cities.appendChild(option);
+                    }
+                    flag = false;
+                    
+                })
+                flag = true;
+                cities.closest('.form__cities').classList.add('active')
+            })
+    }
 })
 
-airports.addEventListener('click', function () {
+cities.addEventListener('change', function () {
 
-if(this.value != 0){
-        resultBlock(arr_airports.get(this.value))
-}
+    airports.closest('.form__airports').classList.remove('active');
+    airports.innerHTML = '';
+    result.innerHTML = '';
+
+    if(this.value != 0 && obj_prevData.cities !== this.value) {
+        obj_prevData.cities = this.value;
+        queryParam('airports')
+            .then(json => {  
+                    error.innerHTML = '';
+                    json
+                        .filter(cont => cont.city_code === this.value)
+                        .sort((a, b) => (a.name > b.name) ? 1 : -1)
+                        .map(elem => {
+                            if (!json.length) {
+                                error.innerHTML = "В данном городе нет Аэропортов"
+                                return
+                            }  else { 
+                                let name  = elem.name || elem.name_translations.en;
+                                arr_airports.set(name, elem) 
+                                if (flag) {
+                                    let option = new Option('Не выбрано', 0);
+                                    airports.appendChild(option);
+                                }
+
+                                let option = new Option(name, name);
+                                airports.appendChild(option);
+                                flag = false;
+                            }
+                        })
+                flag = true;
+                airports.closest('.form__airports').classList.add('active')
+            })
+    }
+})
+
+airports.addEventListener('change', function () {
+
+    if(this.value != 0){
+        resultBlock(arr_airports.get(this.value))      
+    }
 })
 
 
