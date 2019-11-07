@@ -1,16 +1,18 @@
-const form = document.querySelector('.form'),
-countries = document.querySelector('.select__countries'),
-cities = document.querySelector('.select__cities'),
-airports = document.querySelector('.select__airports'),
-result = document.querySelector('.result'),
-error = document.querySelector('.error'),
-arr_airports = new Map()
-obj_prevData = {
-    countries: '',
-    cities: '',
-    airports: ''
-};
-let flag = true;
+(function(document){
+
+    const form = document.querySelector('.form'),
+    countries = document.querySelector('.select__countries'),
+    cities = document.querySelector('.select__cities'),
+    airports = document.querySelector('.select__airports'),
+    result = document.querySelector('.result'),
+    error = document.querySelector('.error'),
+    arr_airports = new Map()
+    obj_prevData = {
+        countries: '',
+        cities: '',
+        airports: ''
+    };
+    let flag = true;
 
 function queryParam (name) {
 
@@ -56,8 +58,8 @@ countries.addEventListener('change', function () {
         obj_prevData.countries = this.value;
 
         queryParam('cities')
-            .then(json => {   
-                 
+            .then(json => {
+                
                 json
                     .filter(cont => { return cont.country_code === this.value})
                     .sort((a, b) => (a.name > b.name) ? 1 : -1 )
@@ -144,3 +146,4 @@ queryParam('countries')
     })
     flag = true;
 })
+}(document))
